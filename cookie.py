@@ -4,7 +4,10 @@ import json
 from datetime import datetime
 
 # === CONFIG ===
-HISTORY_DIR = os.path.join(os.environ.get("LOCALAPPDATA", os.path.expanduser("~")), "HYDROXIDE", "processed")
+if os.name == "nt":
+    HISTORY_DIR = os.path.join(os.environ.get("LOCALAPPDATA", os.path.expanduser("~")), "HYDROXIDE", "processed")
+else:
+    HISTORY_DIR = os.path.join(os.path.expanduser("~"), "Library", "Application Support", "HYDROXIDE", "processed")
 
 # === COLORS ===
 W = "\033[97m"
@@ -108,7 +111,8 @@ def show_header():
 def copy_to_clipboard(text: str) -> bool:
     try:
         import subprocess
-        process = subprocess.Popen(["clip"], stdin=subprocess.PIPE)
+        cmd = ["clip"] if os.name == "nt" else ["pbcopy"]
+        process = subprocess.Popen(cmd, stdin=subprocess.PIPE)
         process.communicate(text.encode())
         return True
     except:
