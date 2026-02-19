@@ -37,7 +37,7 @@ Chromium is needed because Google Chrome 137+ removed `--load-extension` support
 ## Usage
 
 ```
-python main.py
+python cookie_main.py
 ```
 
 ### Menu Options
@@ -85,7 +85,7 @@ After refreshing a cookie or generating accounts, you can import directly into [
 ## Project Structure
 
 ```
-main.py                 - Entry point: menu, cookie refresh, main loop
+cookie_main.py          - Entry point: menu, cookie refresh, main loop
 modules/
   config.py             - Constants, colors, paths
   bypass.py             - Cookie refresh via auth ticket redemption
