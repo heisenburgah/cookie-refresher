@@ -5,8 +5,8 @@ import re
 import asyncio
 from datetime import datetime
 
-from config import HISTORY_DIR, SIGNUP_DIR, CHROMIUM_PATH, NOPECHA_EXT_DIR, W, G, GR, R, C, Y, RST
-from helpers import show_header, print_progress, copy_to_clipboard, import_to_account_manager
+from modules.config import HISTORY_DIR, SIGNUP_DIR, CHROMIUM_PATH, NOPECHA_EXT_DIR, W, G, GR, R, C, Y, RST
+from modules.helpers import show_header, print_progress, copy_to_clipboard, import_to_account_manager
 
 
 def save_generated_account(username, password, email, email_password, cookie, verified):

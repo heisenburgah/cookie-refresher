@@ -1,7 +1,7 @@
 import os
 import requests
 
-from config import (
+from modules.config import (
     W, G, GR, R, C, Y, RST,
     BANNER, AM_PORT, ROGUE_PLACE_ID, ROGUE_BADGES,
 )

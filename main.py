@@ -13,15 +13,15 @@ except ImportError:
     print("Installing requests...")
     install("requests")
 
-from config import HISTORY_DIR, W, G, GR, R, C, Y, RST
-from bypass import Bypass
-from helpers import (
+from modules.config import HISTORY_DIR, W, G, GR, R, C, Y, RST
+from modules.bypass import Bypass
+from modules.helpers import (
     show_header, set_title, print_cookie, copy_to_clipboard,
     import_to_account_manager, get_account_info, get_account_age,
     check_badges, print_rogue_info,
 )
-from history import save_to_history, show_history
-from generator import generate_accounts
+from modules.history import save_to_history, show_history
+from modules.generator import generate_accounts
 
 
 def show_menu():

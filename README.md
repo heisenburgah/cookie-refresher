@@ -37,7 +37,7 @@ Chromium is needed because Google Chrome 137+ removed `--load-extension` support
 ## Usage
 
 ```
-python cookie.py
+python main.py
 ```
 
 ### Menu Options
@@ -85,12 +85,13 @@ After refreshing a cookie or generating accounts, you can import directly into [
 ## Project Structure
 
 ```
-cookie.py       - Entry point: menu, cookie refresh, main loop
-config.py       - Constants, colors, paths
-bypass.py       - Cookie refresh via auth ticket redemption
-helpers.py      - UI utilities + Roblox API lookups
-history.py      - History CRUD + display
-generator.py    - Account generation with browser automation
+main.py                 - Entry point: menu, cookie refresh, main loop
+modules/
+  config.py             - Constants, colors, paths
+  bypass.py             - Cookie refresh via auth ticket redemption
+  helpers.py            - UI utilities + Roblox API lookups
+  history.py            - History CRUD + display
+  generator.py          - Account generation with browser automation
 ```
 
 ## Data Storage

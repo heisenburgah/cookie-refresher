@@ -2,8 +2,8 @@ import os
 import json
 from datetime import datetime
 
-from config import HISTORY_DIR, W, G, GR, R, C, RST
-from helpers import show_header, set_title, print_cookie, copy_to_clipboard, import_to_account_manager
+from modules.config import HISTORY_DIR, W, G, GR, R, C, RST
+from modules.helpers import show_header, set_title, print_cookie, copy_to_clipboard, import_to_account_manager
 
 
 def save_to_history(username, user_id, display_name, old_cookie, new_cookie, badges_owned=None, account_age=None):
