@@ -1,3 +1,7 @@
+# https://hydroxide.solutions
+# https://discord.gg/fnpNyCsG4u
+# https://github.com/heisenburgah
+####### https://github.com/depthso/Account-generator i think?? i frogt no it was https://github.com/Qing762/roblox-auto-signup -zyu
 import os
 import sys
 import json
@@ -132,7 +136,6 @@ async def _generate_accounts_async(results, count, verify, nopecha_key, Chromium
         username = lib.usernameCreator(None, scrambled=True)
         result["username"] = username
 
-        # Generate temp email
         email = None
         email_password = None
         emailID = None
@@ -154,22 +157,18 @@ async def _generate_accounts_async(results, count, verify, nopecha_key, Chromium
             page = None
 
             try:
-                # Set up browser
                 print_progress(x + 1, count, 30, f"Setting up browser{f' (retry {attempt})' if attempt else ''}")
                 co = ChromiumOptions()
                 co.set_argument("--lang", "en")
                 co.mute(True)
                 co.auto_port()
                 if nopecha_key:
-                    # Chrome 137+ removed --load-extension for branded Chrome.
-                    # Use Chromium (open-source) which still supports it.
                     if CHROMIUM_PATH and os.path.exists(CHROMIUM_PATH):
                         co.set_browser_path(CHROMIUM_PATH)
                     co.add_extension(NOPECHA_EXT_DIR)
                 else:
                     co.incognito()
 
-                # Open browser and fill signup form
                 print_progress(x + 1, count, 40, "Filling signup form")
                 chrome = Chromium(addr_or_opts=co)
                 page = chrome.latest_tab
@@ -180,13 +179,11 @@ async def _generate_accounts_async(results, count, verify, nopecha_key, Chromium
                     await asyncio.sleep(2)
                 page.get("https://www.roblox.com/CreateAccount")
 
-                # Dismiss cookie banner
                 try:
                     page.ele('@class=btn-cta-lg cookie-btn btn-primary-md btn-min-width', timeout=3).click()
                 except dp_errors.ElementNotFoundError:
                     pass
 
-                # Wait for form to render and detect page version
                 page.ele("#signup-username", timeout=15)
                 await asyncio.sleep(1)
 

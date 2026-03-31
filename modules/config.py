@@ -1,3 +1,7 @@
+# https://hydroxide.solutions
+# https://discord.gg/fnpNyCsG4u
+# https://github.com/heisenburgah
+
 import os
 
 # === DIRECTORIES ===
@@ -9,8 +13,6 @@ else:
 SIGNUP_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "roblox-auto-signup-main")
 
 # === BROWSER ===
-# Chrome 137+ removed --load-extension for branded Chrome builds.
-# Chromium (open-source) still supports it, so we use it to load NopeCHA.
 _PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 if os.name == "nt":
     CHROMIUM_PATH = None  # TODO: download Ungoogled Chromium for Windows

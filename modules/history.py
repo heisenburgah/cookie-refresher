@@ -1,3 +1,7 @@
+# https://hydroxide.solutions
+# https://discord.gg/fnpNyCsG4u
+# https://github.com/heisenburgah
+
 import os
 import json
 from datetime import datetime
@@ -29,7 +33,6 @@ def save_to_history(username, user_id, display_name, old_cookie, new_cookie, bad
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
-    # Deduplicate: update existing entry if same user_id, otherwise append
     existing_idx = None
     for i, h in enumerate(history):
         if h.get("user_id") == user_id:
