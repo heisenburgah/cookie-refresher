@@ -4,6 +4,8 @@
 
 A CLI tool for refreshing Roblox `.ROBLOSECURITY` cookies and generating new accounts with automatic captcha solving.
 
+https://github.com/user-attachments/assets/c49a5a49-70e0-4771-abb3-32be0b32f4e6
+
 ## Features
 
 - **Cookie Refresh** - Generate a new `.ROBLOSECURITY` cookie from an existing one
