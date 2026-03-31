@@ -8,6 +8,7 @@ import requests
 from modules.config import (
     W, G, GR, R, C, Y, RST,
     BANNER, AM_PORT, ROGUE_PLACE_ID, ROGUE_BADGES,
+    STELLA_API_URL, STELLA_API_TOKEN,
 )
 
 
@@ -28,7 +29,8 @@ def show_header():
     set_title("HYDROXIDE")
     print(BANNER)
     print(f"  {G}Roblox .ROBLOSECURITY Cookie Refresher{RST}")
-    print(f"  {G}--------------------------------------{RST}\n")
+    print(f"  {G}--------------------------------------{RST}")
+    print(f"  {C}hydroxide.solutions{RST}  {G}|{RST}  {C}discord.gg/fnpNyCsG4u{RST}  {G}|{RST}  {C}github.com/heisenburgah{RST}\n")
 
 
 def copy_to_clipboard(text: str) -> bool:
@@ -151,3 +153,77 @@ def print_rogue_info(user_id, cookie: str = None):
     for bid, (name, owned) in badges.items():
         status = f"{GR}Owned{RST}" if owned else f"{G}--{RST}"
         print(f"    {C}{name:<16}{RST} {status}")
+
+
+def get_stella_info(user_id) -> dict:
+    if not STELLA_API_URL or not STELLA_API_TOKEN:
+        return {}
+    try:
+        resp = requests.get(
+            f"{STELLA_API_URL.rstrip('/')}/api/player/lookup",
+            params={"roblox_id": str(user_id)},
+            headers={"Authorization": f"Bearer {STELLA_API_TOKEN}"},
+            timeout=10,
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            return data.get("player", {})
+    except:
+        pass
+    return {}
+
+
+def print_stella_info(user_id, info=None):
+    if info is None:
+        info = get_stella_info(user_id)
+    if not info:
+        return
+
+    print(f"\n  {W}Stella Build Info:{RST}")
+
+    char_name = info.get("first_name", "")
+    house = info.get("house", "")
+    is_lord = info.get("is_lord", False)
+    is_male = info.get("is_male", True)
+    prefix = ("Lord " if is_male else "Lady ") if is_lord else ""
+    full_name = f"{prefix}{char_name} {house}".strip()
+    if full_name:
+        print(f"    {C}{'Character':<16}{RST} {full_name}")
+
+    fields = [
+        ("Class", "class"),
+        ("Subclass", "subclass"),
+        ("Race", "race"),
+        ("Edict", "edict"),
+        ("Artifact", "artifacts"),
+        ("Spec", "spec"),
+        ("Gender", "gender"),
+        ("Dye", "dye"),
+        ("Vampire", "vampire"),
+    ]
+    for label, key in fields:
+        val = info.get(key)
+        if val:
+            print(f"    {C}{label:<16}{RST} {val}")
+
+    remarks = info.get("remarks")
+    if remarks:
+        print(f"    {C}{'Remarks':<16}{RST} {', '.join(remarks)}")
+
+    blessings = info.get("blessings")
+    if blessings:
+        print(f"    {C}{'Blessings':<16}{RST} {blessings}")
+
+    server = info.get("server")
+    if server:
+        srv_name = server.get("name", "Unknown")
+        region = server.get("region", "?")
+        players = server.get("players", "?")
+        max_p = server.get("max_players", "?")
+        print(f"    {C}{'Server':<16}{RST} {srv_name} | {region} | {players}/{max_p}")
+    else:
+        print(f"    {C}{'Server':<16}{RST} {G}Not in a server{RST}")
+
+    last_updated = info.get("last_updated")
+    if last_updated:
+        print(f"    {G}Updated: {last_updated}{RST}")

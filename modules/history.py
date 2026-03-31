@@ -7,7 +7,7 @@ import json
 from datetime import datetime
 
 from modules.config import HISTORY_DIR, W, G, GR, R, C, RST
-from modules.helpers import show_header, set_title, print_cookie, copy_to_clipboard, import_to_account_manager
+from modules.helpers import show_header, set_title, print_cookie, copy_to_clipboard, import_to_account_manager, print_stella_info
 
 
 def save_to_history(username, user_id, display_name, old_cookie, new_cookie, badges_owned=None, account_age=None):
@@ -116,15 +116,13 @@ def show_history_detail(entry: dict):
     print(f"  {W}Refreshed:{RST}  {G}{ts}{RST}")
     print(f"  {G}{'=' * 50}{RST}")
 
-    badges = entry.get("badges_owned", [])
-    if badges:
-        print(f"\n  {W}Rogue Lineage Badges:{RST}  {GR}{', '.join(badges)}{RST}")
-
     print(f"\n  {W}Original Cookie:{RST}\n")
     print_cookie(entry.get("old_cookie", "N/A"))
 
     print(f"\n  {W}Refreshed Cookie:{RST}\n")
     print_cookie(entry.get("new_cookie", "N/A"))
+
+    print_stella_info(uid)
 
     choice = input(f"\n  {W}[1]{RST} Import to Account Manager\n  {W}[2]{RST} Copy refreshed cookie\n  {W}[Enter]{RST} Go back\n\n  {W}Select {G}>{RST} ").strip().lower()
     if choice == "1":

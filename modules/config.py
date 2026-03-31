@@ -41,6 +41,10 @@ BANNER = f"""{G}
 # === ACCOUNT MANAGER ===
 AM_PORT = 7963
 
+# === STELLA API ===
+STELLA_API_URL = "https://stella.heroinhound.cc"
+STELLA_API_TOKEN = "22b87e45a7b126cbc5d0e969bac13378135a4207dd436a25920e598ef2fdcb84"
+
 # === ROGUE LINEAGE ===
 ROGUE_PLACE_ID = 3016661674
 

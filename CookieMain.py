@@ -19,10 +19,11 @@ except ImportError:
 
 from modules.config import HISTORY_DIR, W, G, GR, R, C, Y, RST
 from modules.bypass import Bypass
+import threading
 from modules.helpers import (
     show_header, set_title, print_cookie, copy_to_clipboard,
     import_to_account_manager, get_account_info, get_account_age,
-    check_badges, print_rogue_info,
+    check_badges, print_rogue_info, get_stella_info, print_stella_info,
 )
 from modules.history import save_to_history, show_history
 from modules.generator import generate_accounts
@@ -70,6 +71,12 @@ def refresh_cookie():
         user_id = new_info.get("id") or old_info.get("id") or "?"
         display_name = new_info.get("displayName") or old_info.get("displayName") or ""
 
+        stella_result = [{}]
+        def fetch_stella():
+            stella_result[0] = get_stella_info(user_id)
+        stella_thread = threading.Thread(target=fetch_stella, daemon=True)
+        stella_thread.start()
+
         age = get_account_age(user_id)
         badges = check_badges(user_id)
         badges_owned = [name for bid, (name, owned) in badges.items() if owned]
@@ -87,13 +94,14 @@ def refresh_cookie():
             print(f"  {W}Created:{RST}  {G}{age}{RST}")
         print(f"  {G}{'=' * 50}{RST}")
 
-        print_rogue_info(user_id, new_cookie)
-
         print(f"\n  {W}Original Cookie:{RST}\n")
         print_cookie(cookie)
 
         print(f"\n  {W}New Cookie:{RST}\n")
         print_cookie(new_cookie)
+
+        stella_thread.join(timeout=5)
+        print_stella_info(user_id, stella_result[0])
 
         choice = input(f"\n  {W}[1]{RST} Import to Account Manager\n  {W}[2]{RST} Copy new cookie\n  {W}[Enter]{RST} Go back\n\n  {W}Select {G}>{RST} ").strip().lower()
         if choice == "1":
