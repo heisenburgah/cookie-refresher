@@ -7,6 +7,7 @@ A CLI tool for refreshing Roblox `.ROBLOSECURITY` cookies and generating new acc
 ## Features
 
 - **Cookie Refresh** - Generate a new `.ROBLOSECURITY` cookie from an existing one
+- **Stella Integration** - Queries Stella for in-game build info (class, race, edict, artifacts, etc.)
 - **Account Generation** - Create new Roblox accounts with optional email verification
 - **Captcha Solving** - Automatic FunCaptcha solving via NopeCHA extension
 - **Account History** - Tracks all refreshed accounts with deduplication
@@ -39,7 +40,7 @@ Chromium is needed because Google Chrome 137+ removed `--load-extension` support
 ## Usage
 
 ```
-python cookie_main.py
+python CookieMain.py
 ```
 
 ### Menu Options
@@ -53,7 +54,7 @@ python cookie_main.py
 
 ### Cookie Refresh
 
-Paste an existing `.ROBLOSECURITY` cookie to generate a fresh one. Shows account info, creation date, and Rogue Lineage badges.
+Paste an existing `.ROBLOSECURITY` cookie to generate a fresh one. Shows account info, creation date, and Stella build info (class, race, artifacts, server status, etc.).
 
 ### Account Generation
 
@@ -87,7 +88,7 @@ After refreshing a cookie or generating accounts, you can import directly into [
 ## Project Structure
 
 ```
-cookie_main.py          - Entry point: menu, cookie refresh, main loop
+CookieMain.py           - Entry point: menu, cookie refresh, main loop
 modules/
   config.py             - Constants, colors, paths
   bypass.py             - Cookie refresh via auth ticket redemption
