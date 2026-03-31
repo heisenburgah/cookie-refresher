@@ -1,12 +1,12 @@
 # HYDROXIDE - Cookie Refresher
 
-![Views](https://hits.sh/github.com/heisenburgah/cookie-refresher.svg?label=Views&color=blueviolet)
-
 **Website:** [hydroxide.solutions](https://hydroxide.solutions) | **Discord:** [discord.gg/fnpNyCsG4u](https://discord.gg/fnpNyCsG4u)
 
 A CLI tool for refreshing Roblox `.ROBLOSECURITY` cookies and generating new accounts with automatic captcha solving.
 
 https://github.com/user-attachments/assets/c49a5a49-70e0-4771-abb3-32be0b32f4e6
+
+![Views](https://hits.sh/github.com/heisenburgah/cookie-refresher.svg?label=Views&color=blueviolet)
 
 ## Features
 
