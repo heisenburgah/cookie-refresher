@@ -18,7 +18,6 @@ A CLI tool for refreshing Roblox `.ROBLOSECURITY` cookies and generating new acc
 
 - Python 3.10+
 - [Chromium](https://www.chromium.org/) browser (required for account generation with captcha solving)
-- [roblox-auto-signup-main](https://github.com/Qing762/roblox-auto-signup) in the project directory
 
 ### Python Dependencies
 
