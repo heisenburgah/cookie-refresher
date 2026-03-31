@@ -10,16 +10,14 @@ if os.name == "nt":
 else:
     HISTORY_DIR = os.path.join(os.path.expanduser("~"), "Library", "Application Support", "HYDROXIDE", "processed")
 
-SIGNUP_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "roblox-auto-signup-main")
-
 # === BROWSER ===
 _PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 if os.name == "nt":
-    CHROMIUM_PATH = None  # TODO: download Ungoogled Chromium for Windows
+    CHROMIUM_PATH = None
 else:
     CHROMIUM_PATH = "/Applications/Chromium.app/Contents/MacOS/Chromium"
 
-NOPECHA_EXT_DIR = os.path.join(_PROJECT_DIR, "roblox-auto-signup-main", "lib", "NopeCHA")
+NOPECHA_EXT_DIR = os.path.join(_PROJECT_DIR, "NopeCHA")
 
 # === COLORS ===
 W = "\033[97m"

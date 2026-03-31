@@ -1,16 +1,62 @@
 # https://hydroxide.solutions
 # https://discord.gg/fnpNyCsG4u
 # https://github.com/heisenburgah
-####### https://github.com/depthso/Account-generator i think?? i frogt no it was https://github.com/Qing762/roblox-auto-signup -zyu
 import os
 import sys
 import json
 import re
+import random
+import string
 import asyncio
 from datetime import datetime
 
-from modules.config import HISTORY_DIR, SIGNUP_DIR, CHROMIUM_PATH, NOPECHA_EXT_DIR, W, G, GR, R, C, Y, RST
+from modules.config import HISTORY_DIR, CHROMIUM_PATH, NOPECHA_EXT_DIR, W, G, GR, R, C, Y, RST
 from modules.helpers import show_header, print_progress, copy_to_clipboard, import_to_account_manager
+
+
+def _random_username(length=12):
+    prefix = random.choice(["x", "ii", "oo", "zz", "q", "v", "xx"])
+    body = ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
+    suffix = str(random.randint(10, 999))
+    return (prefix + body + suffix)[:20]
+
+
+async def _generate_temp_email():
+    try:
+        from pymailtm import MailTm
+    except ImportError:
+        import subprocess
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "pymailtm"],
+                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        from pymailtm import MailTm
+
+    mt = MailTm()
+    account = mt.get_account()
+    return account.address, account.password, account.id_, account
+
+
+async def _fetch_verification_email(account, timeout=150):
+    import time
+    start = time.time()
+    while time.time() - start < timeout:
+        try:
+            messages = account.get_messages()
+            if messages:
+                for msg in messages:
+                    body = getattr(msg, 'text', None)
+                    if not body and hasattr(msg, 'html') and msg.html:
+                        body = msg.html if isinstance(msg.html, str) else msg.html[0]
+                    if body:
+                        match = re.search(
+                            r'https://www\.roblox\.com/account/settings/verify-email\?ticket=[^\s)"]+',
+                            body
+                        )
+                        if match:
+                            return match.group(0)
+        except Exception:
+            pass
+        await asyncio.sleep(5)
+    return None
 
 
 def save_generated_account(username, password, email, email_password, cookie, verified):
@@ -61,10 +107,7 @@ def generate_accounts():
     verify_input = input(f"  {W}Verify with email? (y/n) {G}>{RST} ").strip().lower()
     verify = verify_input in ("y", "yes", "")
 
-    default_key = "I-DTLJG52UVWRP"
-    nopecha_key = input(f"  {W}NopeCHA API key (Enter for default) {G}>{RST} ").strip()
-    if not nopecha_key:
-        nopecha_key = default_key
+    nopecha_key = input(f"  {W}NopeCHA API key (Enter to skip) {G}>{RST} ").strip()
     if nopecha_key and not re.match(r'^[a-zA-Z0-9_-]+$', nopecha_key):
         print(f"\n  {Y}Invalid API key format, skipping.{RST}")
         nopecha_key = ""
@@ -79,30 +122,10 @@ def generate_accounts():
             subprocess.check_call([sys.executable, "-m", "pip", "install", "DrissionPage"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             from DrissionPage import Chromium, ChromiumOptions
             from DrissionPage import errors as dp_errors
-            print(f"  {GR}DrissionPage installed!{RST}")
         except Exception as e:
             print(f"  {R}Failed to install DrissionPage: {e}{RST}")
             input(f"\n  {G}Press Enter to go back...{RST}")
             return
-
-    try:
-        sys.path.insert(0, SIGNUP_DIR)
-        from lib.lib import Main as SignupMain
-    except ImportError:
-        print(f"\n  {Y}Installing pymailtm...{RST}")
-        try:
-            import subprocess
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "pymailtm"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            sys.path.insert(0, SIGNUP_DIR)
-            from lib.lib import Main as SignupMain
-            print(f"  {GR}pymailtm installed!{RST}")
-        except Exception as e:
-            print(f"  {R}Failed to install pymailtm: {e}{RST}")
-            input(f"\n  {G}Press Enter to go back...{RST}")
-            return
-    finally:
-        if SIGNUP_DIR in sys.path:
-            sys.path.remove(SIGNUP_DIR)
 
     print(f"\n  {G}Starting generation...{RST}\n")
 
@@ -110,7 +133,7 @@ def generate_accounts():
     try:
         asyncio.run(_generate_accounts_async(
             results, count, verify, nopecha_key,
-            Chromium, ChromiumOptions, dp_errors, SignupMain
+            Chromium, ChromiumOptions, dp_errors
         ))
     except KeyboardInterrupt:
         print(f"\n\n  {Y}Interrupted.{RST}")
@@ -118,9 +141,8 @@ def generate_accounts():
     _show_generation_results(results)
 
 
-async def _generate_accounts_async(results, count, verify, nopecha_key, Chromium, ChromiumOptions, dp_errors, SignupMain):
-    lib = SignupMain()
-    password = "Qing762.chy"
+async def _generate_accounts_async(results, count, verify, nopecha_key, Chromium, ChromiumOptions, dp_errors):
+    password = "Hydroxide1!"
 
     for x in range(count):
         result = {
@@ -131,18 +153,17 @@ async def _generate_accounts_async(results, count, verify, nopecha_key, Chromium
         page = None
         max_captcha_retries = 3
 
-        # Generate username
         print_progress(x + 1, count, 10, "Generating username")
-        username = lib.usernameCreator(None, scrambled=True)
+        username = _random_username()
         result["username"] = username
 
         email = None
         email_password = None
-        emailID = None
+        email_account = None
         if verify:
             print_progress(x + 1, count, 20, "Generating temp email")
             try:
-                email, email_password, token, emailID = await lib.generateEmail(password)
+                email, email_password, _email_id, email_account = await _generate_temp_email()
                 result["email"] = email
                 result["email_password"] = email_password
             except Exception as e:
@@ -301,25 +322,8 @@ async def _generate_accounts_async(results, count, verify, nopecha_key, Chromium
                 except dp_errors.ElementNotFoundError:
                     pass
 
-                # Poll for verification email
                 print_progress(x + 1, count, 80, "Waiting for verification email")
-                link = None
-                for _attempt in range(30):
-                    try:
-                        messages = lib.fetchVerification(email, email_password, emailID)
-                        if messages and len(messages) > 0:
-                            msg = messages[0]
-                            body = getattr(msg, 'text', None)
-                            if not body and hasattr(msg, 'html') and msg.html and len(msg.html) > 0:
-                                body = msg.html[0]
-                            if body:
-                                match = re.search(r'https://www\.roblox\.com/account/settings/verify-email\?ticket=[^\s)"]+', body)
-                                if match:
-                                    link = match.group(0)
-                                    break
-                    except Exception:
-                        pass
-                    await asyncio.sleep(5)
+                link = await _fetch_verification_email(email_account) if email_account else None
 
                 if link:
                     print_progress(x + 1, count, 85, "Clicking verification link")
