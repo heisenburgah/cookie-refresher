@@ -1,5 +1,7 @@
 # HYDROXIDE - Cookie Refresher
 
+**Website:** [hydroxide.solutions](https://hydroxide.solutions) | **Discord:** [discord.gg/fnpNyCsG4u](https://discord.gg/fnpNyCsG4u)
+
 A CLI tool for refreshing Roblox `.ROBLOSECURITY` cookies and generating new accounts with automatic captcha solving.
 
 ## Features
