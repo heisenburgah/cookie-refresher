@@ -104,3 +104,11 @@ modules/
 |----------|------|
 | macOS | `~/Library/Application Support/HYDROXIDE/processed/` |
 | Windows | `%LOCALAPPDATA%\HYDROXIDE\processed\` |
+
+## Credits
+
+- [roblox-auto-signup](https://github.com/qing762/roblox-auto-signup) by Qing762
+
+## License
+
+Licensed under the GNU General Public License v3.0. See [LICENSE](LICENSE) for details.
